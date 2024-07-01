@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar } from 'antd';
-import eventsData from './test.json'; // ファイルのインポート
+import eventsData from './schedule.json'; // ファイルのインポート
 
 const CalendarComponent = () => {
   const [events] = useState(eventsData); // useStateを使ってデータを取得
