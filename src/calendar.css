@@ -1,6 +1,6 @@
 .events {
-    margin: 0;
-    padding: 0;
+    margin: 5;
+    padding: 5;
     list-style: none;
 }
 .events .ant-badge-status {
