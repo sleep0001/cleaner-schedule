@@ -23,3 +23,19 @@
 .ant-picker-calendar-header {
     background-color: rgb(131, 80, 18);
 }
+
+/* 例: スマートフォン用のスタイル */
+@media (max-width: 768px) {
+    .ant-picker-calendar-date-content {
+      /* モバイル用のスタイルをここに追加 */
+      width: 55px;
+    }
+
+    .ant-picker-cell ant-picker-cell-in-view {
+        padding: 0px, 0px, 0px;
+        margin: auto;
+        padding: 1px;
+    }
+
+    
+  }
