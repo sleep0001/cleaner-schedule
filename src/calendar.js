@@ -1,50 +1,77 @@
 import React, { useState } from 'react';
-import { Calendar } from 'antd';
+import { Calendar, Modal } from 'antd';
 import eventsData from './schedule.json'; // ファイルのインポート
 import './CalendarComponent.css'; // スタイルシートのインポート
 
 const CalendarComponent = () => {
   const [events] = useState(eventsData); // useStateを使ってデータを取得
+  const [selectedDate, setSelectedDate] = useState(null); // 選択された日付を保持
+  const [isModalVisible, setIsModalVisible] = useState(false); // モーダルの表示状態を保持
+
+  const getClassName = (eventInfo) => {
+    if (!eventInfo || !eventInfo.events) return 'ant-picker-calendar-date-content';
+
+    const classNames = {
+      '野際': 'team1',
+      '山崎': 'team2',
+      '岡野': 'team3',
+      '佐藤': 'team4',
+      '市橋': 'team5',
+      '冨木田': 'team6',
+      '年末年始': 'newyear'
+    };
+
+    for (const [key, value] of Object.entries(classNames)) {
+      if (eventInfo.events.includes(key)) return `ant-picker-calendar-date-content ${value}`;
+    }
+
+    return 'ant-picker-calendar-date-content holiday';
+  };
 
   const cellRender = (value) => {
     const date = value.format('YYYY-MM-DD');
     const eventInfo = events.find(event => event.date === date);
-    
-    let className = 'ant-picker-calendar-date-content';
 
-    if (eventInfo && eventInfo.events && Array.isArray(eventInfo.events)) {
-      // 予定の種類に応じてクラスを追加      
-      if (eventInfo.events.includes('野際')) {
-        className += ' team1';
-      } else if (eventInfo.events.includes('山崎')) {
-        className += ' team2';
-      } else if (eventInfo.events.includes('岡野')) {
-        className += ' team3';
-      } else if (eventInfo.events.includes('佐藤')) {
-        className += ' team4';
-      } else if (eventInfo.events.includes('市橋')) {
-        className += ' team5';  
-      } else if (eventInfo.events.includes('冨木田')){
-        className += ' team6';
-      } else if (eventInfo.events.includes('年末年始')){
-        className += ' newyear';
-      } else {
-        className += ' holiday';
-      }
-    }
+    const className = getClassName(eventInfo);
 
     return (
       <div className={className}>
-        {/* eventInfo.eventsが存在する場合のみmapメソッドを使用 */}
-        {eventInfo && eventInfo.events && eventInfo.events.map((event, index) => (
+        {eventInfo?.events?.map((event, index) => (
           <div key={index} className="event-item">{event}</div>
         ))}
       </div>
     );
   };
 
+  const onSelect = (value) => {
+    const date = value.format('YYYY-MM-DD');
+    const eventInfo = events.find(event => event.date === date);
+    setSelectedDate(eventInfo);
+    setIsModalVisible(true); // モーダルを表示
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false); // モーダルを閉じる
+  };
+
   return (
-    <Calendar cellRender={cellRender} />
+    <>
+      <Calendar cellRender={cellRender} onSelect={onSelect} />
+      <Modal
+        title="Selected Date Events"
+        visible={isModalVisible}
+        onOk={handleModalClose}
+        onCancel={handleModalClose}
+      >
+        {selectedDate ? (
+          selectedDate.events.map((event, index) => (
+            <div key={index}>{event}</div>
+          ))
+        ) : (
+          <div>No events</div>
+        )}
+      </Modal>
+    </>
   );
 };
 
