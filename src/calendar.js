@@ -8,6 +8,7 @@ const CalendarComponent = () => {
   const [isOn, setIsOn] = useState(false);
   const [selectDateFirst, setSelectDateFirst] = useState(null);
   const [selectDateSecond, setSelectDateSecond] = useState(null);
+  const [currentMonth, setCurrentMonth] = useState(null);
 
   const getClassName = (eventInfo) => {
     if (!eventInfo || !eventInfo.events) return 'ant-picker-calendar-date-content';
@@ -24,16 +25,11 @@ const CalendarComponent = () => {
 
     // 交換モードがオンで選択中の日付なら、背景色真っ赤を適用
     if (isOn) {
-      console.log(selectDateFirst !== null);
-      if (selectDateFirst !== null) {
-        if (eventInfo.date === selectDateFirst.date) {
-          return 'ant-picker-calendar-date-content select-date'
-        }
+      if (selectDateFirst != null && eventInfo.date === selectDateFirst.date) {
+        return 'ant-picker-calendar-date-content select-date';
       }
-      if (selectDateSecond !== null) {
-        if (eventInfo.date === selectDateSecond.date) {
-          return 'ant-picker-calendar-date-content select-date'
-        }
+      if (selectDateSecond != null && eventInfo.date === selectDateSecond.date) {
+        return 'ant-picker-calendar-date-content select-date';
       }
     }
 
@@ -60,15 +56,21 @@ const CalendarComponent = () => {
   };
 
   const onSelect = (value) => {
+    console.log('onselect');
     const date = value.format('YYYY-MM-DD');
     const eventInfo = events.find(event => event.date === date);
+
+    // 現在の月と選択された日付の月が一致しない場合は処理をスキップ
+    if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
+      return;
+    }
+    
 
     if (isOn) {
       // 交換モードオンの時
       if (selectDateFirst === null) {
         // 一つ目の日付がない場合
         setSelectDateFirst(eventInfo);
-        console.log('オン');
       } else {
         // 一つ目の日付がある場合
         if (selectDateSecond === null) {
@@ -83,6 +85,10 @@ const CalendarComponent = () => {
     }
     console.log('first', selectDateFirst);
     console.log('second', selectDateSecond);
+  };
+
+  const onPanelChange = (value) => {
+    setCurrentMonth(value);
   };
 
   const toggleSwitch = () => {
@@ -103,7 +109,7 @@ const CalendarComponent = () => {
           margin: 16,
         }}
       />
-      <Calendar cellRender={cellRender} onSelect={onSelect} />
+      <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange}/>
     </>
   );
 };

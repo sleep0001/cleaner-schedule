@@ -41,6 +41,7 @@
 
   .ant-picker-calendar-date-content.select-date {
     background-color: red !important;
+    color: #ffffFF !important;
   }
 
   .event-item {
