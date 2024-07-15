@@ -5,8 +5,6 @@ import './CalendarComponent.css'; // スタイルシートのインポート
 
 const CalendarComponent = () => {
   const [events] = useState(eventsData); // useStateを使ってデータを取得
-  // const [selectedDate, setSelectedDate] = useState(null); // 選択された日付を保持
-  // const [isModalVisible, setIsModalVisible] = useState(false); // モーダルの表示状態を保持
   const [isOn, setIsOn] = useState(false);
   const [selectDateFirst, setSelectDateFirst] = useState(null);
   const [selectDateSecond, setSelectDateSecond] = useState(null);
@@ -23,6 +21,11 @@ const CalendarComponent = () => {
       '冨木田': 'team6',
       '年末年始': 'newyear'
     };
+
+    // 交換モードがオンで選択中の日付なら、背景色真っ赤を適用
+    if (isOn && (eventInfo.date === selectDateFirst.date || eventInfo.date === selectDateSecond.date)) {
+      return 'ant-picker-calendar-date-content select-date'
+    }
 
     for (const [key, value] of Object.entries(classNames)) {
       if (eventInfo.events.includes(key)) return `ant-picker-calendar-date-content ${value}`;
@@ -49,6 +52,7 @@ const CalendarComponent = () => {
   const onSelect = (value) => {
     const date = value.format('YYYY-MM-DD');
     const eventInfo = events.find(event => event.date === date);
+
     if (isOn) {
       // 交換モードオンの時
       if (selectDateFirst === null) {
@@ -66,19 +70,10 @@ const CalendarComponent = () => {
           setSelectDateFirst(eventInfo);
         }
       }
-    } else {
-      // 交換モードオフの時
-      console.log('交換モードオフ');
     }
     console.log('first', selectDateFirst);
     console.log('second', selectDateSecond);
-    // setSelectedDate(eventInfo);
-    // setIsModalVisible(true); // モーダルを表示
   };
-
-  // const handleModalClose = () => {
-  //   setIsModalVisible(false); // モーダルを閉じる
-  // };
 
   const toggleSwitch = () => {
     if (isOn) {
@@ -98,20 +93,6 @@ const CalendarComponent = () => {
         }}
       />
       <Calendar cellRender={cellRender} onSelect={onSelect} />
-      {/* <Modal
-        title="Selected Date Events"
-        // visible={isModalVisible}
-        onOk={handleModalClose}
-        onCancel={handleModalClose}
-      >
-       {selectedDate ? (
-          selectedDate.events.map((event, index) => (
-            <div key={index}>{event}</div>
-          ))
-        ) : (
-          <div>No events</div>
-        )}
-      </Modal> */}
     </>
   );
 };

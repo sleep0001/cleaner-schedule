@@ -39,6 +39,10 @@
     background-color: #FFEECC;
   }
 
+  .ant-picker-calendar-date-content.select-date {
+    background-color: red !important;
+  }
+
   .event-item {
     margin: 5px 0;
     font-weight: bold;
