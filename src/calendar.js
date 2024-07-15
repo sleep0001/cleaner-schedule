@@ -23,8 +23,18 @@ const CalendarComponent = () => {
     };
 
     // 交換モードがオンで選択中の日付なら、背景色真っ赤を適用
-    if (isOn && (eventInfo.date === selectDateFirst.date || eventInfo.date === selectDateSecond.date)) {
-      return 'ant-picker-calendar-date-content select-date'
+    if (isOn) {
+      console.log(selectDateFirst !== null);
+      if (selectDateFirst !== null) {
+        if (eventInfo.date === selectDateFirst.date) {
+          return 'ant-picker-calendar-date-content select-date'
+        }
+      }
+      if (selectDateSecond !== null) {
+        if (eventInfo.date === selectDateSecond.date) {
+          return 'ant-picker-calendar-date-content select-date'
+        }
+      }
     }
 
     for (const [key, value] of Object.entries(classNames)) {
@@ -82,6 +92,7 @@ const CalendarComponent = () => {
       console.log('トグルがオンにされた');
     }
     setIsOn(!isOn);
+
   }
 
   return (
