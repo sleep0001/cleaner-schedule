@@ -78,8 +78,8 @@ const CalendarComponent = () => {
           setSelectDateSecond(eventInfo);
         } else {
           // 二つ目の日付がある場合、firstをsecondに移す、firstに新しく格納
-          setSelectDateSecond(selectDateFirst);
-          setSelectDateFirst(eventInfo);
+          setSelectDateFirst(selectDateSecond);
+          setSelectDateSecond(eventInfo);
         }
       }
     }
