@@ -87,6 +87,7 @@ const CalendarComponent = () => {
   const toggleSwitch = () => {
     if (isOn) {
       console.log('トグルがオフにされた');
+      setSelectedDate({});
     } else {
       console.log('トグルがオンにされた');
     }
