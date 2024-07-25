@@ -6,8 +6,7 @@ import './CalendarComponent.css'; // スタイルシートのインポート
 const CalendarComponent = () => {
   const [events] = useState(eventsData); // useStateを使ってデータを取得
   const [isOn, setIsOn] = useState(false);
-  const [selectDateFirst, setSelectDateFirst] = useState(null);
-  const [selectDateSecond, setSelectDateSecond] = useState(null);
+  const [selectedDate, setSelectedDate] = useState({});
   const [currentMonth, setCurrentMonth] = useState(null);
 
   const getClassName = (eventInfo) => {
@@ -24,13 +23,8 @@ const CalendarComponent = () => {
     };
 
     // 交換モードがオンで選択中の日付なら、背景色真っ赤を適用
-    if (isOn) {
-      if (selectDateFirst != null && eventInfo.date === selectDateFirst.date) {
-        return 'ant-picker-calendar-date-content select-date';
-      }
-      if (selectDateSecond != null && eventInfo.date === selectDateSecond.date) {
-        return 'ant-picker-calendar-date-content select-date';
-      }
+    if (isOn && selectedDate.hasOwnProperty(eventInfo.date)) {
+      return 'ant-picker-calendar-date-content select-date';
     }
 
     for (const [key, value] of Object.entries(classNames)) {
@@ -57,6 +51,13 @@ const CalendarComponent = () => {
 
   const onSelect = (value) => {
     console.log('onselect');
+
+    // 交換モードでないなら何もせずにreturn
+    if (!isOn) {
+      console.log(selectedDate);
+      return;
+    }
+
     const date = value.format('YYYY-MM-DD');
     const eventInfo = events.find(event => event.date === date);
 
@@ -66,25 +67,17 @@ const CalendarComponent = () => {
     }
     
 
-    if (isOn) {
-      // 交換モードオンの時
-      if (selectDateFirst === null) {
-        // 一つ目の日付がない場合
-        setSelectDateFirst(eventInfo);
-      } else {
-        // 一つ目の日付がある場合
-        if (selectDateSecond === null) {
-          // 二つ目の日付がない場合
-          setSelectDateSecond(eventInfo);
-        } else {
-          // 二つ目の日付がある場合、firstをsecondに移す、firstに新しく格納
-          setSelectDateFirst(selectDateSecond);
-          setSelectDateSecond(eventInfo);
-        }
-      }
+    const newSelected = {...selectedDate};
+    if (newSelected.hasOwnProperty(eventInfo.date)) {
+      delete newSelected[eventInfo.date];
+    } else if (Object.keys(newSelected).length < 2) {
+      newSelected[eventInfo.date] = eventInfo.events;
+    } else {
+      console.log(newSelected);
+      return;
     }
-    console.log('first', selectDateFirst);
-    console.log('second', selectDateSecond);
+    setSelectedDate(newSelected);
+    console.log(newSelected);
   };
 
   const onPanelChange = (value) => {
@@ -94,6 +87,7 @@ const CalendarComponent = () => {
   const toggleSwitch = () => {
     if (isOn) {
       console.log('トグルがオフにされた');
+      setSelectedDate({});
     } else {
       console.log('トグルがオンにされた');
     }
