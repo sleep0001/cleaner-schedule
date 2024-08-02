@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, Modal, Switch } from 'antd';
+import { Calendar, Switch, Button } from 'antd';
 import './CalendarComponent.css'; // スタイルシートのインポート
 import axios from 'axios';
 
@@ -87,8 +87,7 @@ const CalendarComponent = () => {
       if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
         return;
       }
-      
-  
+
       const newSelected = {...selectedDate};
       if (newSelected.hasOwnProperty(eventInfo.date)) {
         delete newSelected[eventInfo.date];
@@ -115,15 +114,46 @@ const CalendarComponent = () => {
       }
       setIsOn(!isOn);
     }
+
+    const handleClick = async () => {
+      const newSelected = {...selectedDate};
+      // 選択日が2つあるなら交換、そうでないならフラッシュメッセージを残す。（一旦何も起きずにスキップで）
+      if (Object.keys(newSelected).length === 2) {
+        const keys = Object.keys(selectedDate);
+        const firstDate = keys.length > 0 ? selectedDate[keys[0]] : null;
+        const secondDate = keys.length > 1 ? selectedDate[keys[1]] : null;
+        const myInit = [
+            {
+              "date": keys[0],
+              "events": "false",
+              "people": secondDate
+            },
+            {
+              "date": keys[1],
+              "events": "false",
+              "people": firstDate
+            }
+          ]
+        try {
+          const response1 = await axios.put('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items', myInit[0]);
+          const response2 = await axios.put('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items', myInit[1]);
+          console.log('Success:', response1, response2);
+        } catch (error) {
+          console.log('Error:', error);
+        }
+      }
+    }
   
     return (
       <>
+        <a>交換モード</a>
         <Switch
           onClick={toggleSwitch}
           style={{
             margin: 16,
           }}
         />
+        <Button type="primary" onClick={handleClick}>CHANGE</Button>
         <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange}/>
       </>
     );
