@@ -138,6 +138,8 @@ const CalendarComponent = () => {
           const response1 = await axios.put('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items', myInit[0]);
           const response2 = await axios.put('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items', myInit[1]);
           console.log('Success:', response1, response2);
+          // 成功後にページをリロード
+          window.location.reload();
         } catch (error) {
           console.log('Error:', error);
         }
