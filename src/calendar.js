@@ -150,17 +150,17 @@ const CalendarComponent = () => {
 
   return (
     <>
-        <a>交換モード</a>
-        <Switch
-            onClick={toggleSwitch}
-            style={{
-                margin: 16,
-            }}
-        />
-        <Button type="primary" onClick={handleClick}>CHANGE</Button>
-        <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
+      <a>交換モード</a>
+      <Switch
+        onClick={toggleSwitch}
+        style={{
+          margin: 16,
+        }}
+      />
+      <Button type="primary" onClick={handleClick} href="#">CHANGE</Button>
+      <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
     </>
-);
+  );
 };
 
 export default CalendarComponent;
