@@ -5,7 +5,7 @@ import './CalendarComponent.css'; // スタイルシートのインポート
 
 const CalendarComponent = () => {
   const [events] = useState(eventsData); // useStateを使ってデータを取得
-  const [isOn, setIsOn] = useState(false);
+  const [isChangeMode, setIsChangeMode] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
   const [currentMonth, setCurrentMonth] = useState(null);
 
@@ -23,7 +23,7 @@ const CalendarComponent = () => {
     };
 
     // 交換モードがオンで選択中の日付なら、背景色真っ赤を適用
-    if (isOn && selectedDate.hasOwnProperty(eventInfo.date)) {
+    if (isChangeMode && selectedDate.hasOwnProperty(eventInfo.date)) {
       return 'ant-picker-calendar-date-content select-date';
     }
 
@@ -53,7 +53,7 @@ const CalendarComponent = () => {
     console.log('onselect');
 
     // 交換モードでないなら何もせずにreturn
-    if (!isOn) {
+    if (!isChangeMode) {
       console.log(selectedDate);
       return;
     }
@@ -85,13 +85,13 @@ const CalendarComponent = () => {
   };
 
   const toggleSwitch = () => {
-    if (isOn) {
+    if (isChangeMode) {
       console.log('トグルがオフにされた');
       setSelectedDate({});
     } else {
       console.log('トグルがオンにされた');
     }
-    setIsOn(!isOn);
+    setIsChangeMode(!isChangeMode);
 
   }
 
