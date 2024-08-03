@@ -84,6 +84,12 @@ const CalendarComponent = () => {
     const date = value.format('YYYY-MM-DD');
     const eventInfo = data.find(event => event.date === date);
 
+    // 休日は選択できない
+    if (eventInfo.events === 'true') {
+      console.log(selectedDate);
+      return;
+    }
+
     // 現在の月と選択された日付の月が一致しない場合は処理をスキップ
     if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
       return;
