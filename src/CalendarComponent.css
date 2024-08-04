@@ -1,50 +1,50 @@
 .event-container {
-    padding: 5px;
-  }
-  
-  .event-item {
-    margin: 5px 0;
-    font-weight: bold;
-  }
-  
-  .ant-picker-calendar-date-content.team1 {
-    background-color: #8BA083 ;
-  }
-  
-  .ant-picker-calendar-date-content.team2 {
-    background-color: #C0602D ;
-  }
-  
-  .ant-picker-calendar-date-content.team3 {
-    background-color: #CDB5AF ;
-  }
+  padding: 5px;
+}
 
-  .ant-picker-calendar-date-content.team4 {
-    background-color: #D2B48C  ;
-  }
-  
-  .ant-picker-calendar-date-content.team5 {
-    background-color: #EEB887  ;
-  }
+.event-item {
+  margin: 5px 0;
+  font-weight: bold;
+}
 
-  .ant-picker-calendar-date-content.team6 {
-    background-color: #D5CEA3  ;
-  }
+.ant-picker-calendar-date-content.team1 {
+  background-color: #8BA083;
+}
 
-  .ant-picker-calendar-date-content.holiday {
-    background-color: #E090AB;
-  }
+.ant-picker-calendar-date-content.team2 {
+  background-color: #C0602D;
+}
 
-  .ant-picker-calendar-date-content.newyear {
-    background-color: #FFEECC;
-  }
+.ant-picker-calendar-date-content.team3 {
+  background-color: #CDB5AF;
+}
 
-  .ant-picker-calendar-date-content.select-date {
-    background-color: red !important;
-    color: #ffffFF !important;
-  }
+.ant-picker-calendar-date-content.team4 {
+  background-color: #D2B48C;
+}
 
-  .event-item {
-    margin: 5px 0;
-    font-weight: bold;
-  }
+.ant-picker-calendar-date-content.team5 {
+  background-color: #EEB887;
+}
+
+.ant-picker-calendar-date-content.team6 {
+  background-color: #D5CEA3;
+}
+
+.ant-picker-calendar-date-content.holiday {
+  background-color: #E090AB;
+}
+
+.ant-picker-calendar-date-content.newyear {
+  background-color: #FFEECC;
+}
+
+.ant-picker-calendar-date-content.select-date {
+  background-color: red !important;
+  color: #ffffFF !important;
+}
+
+.event-item {
+  margin: 5px 0;
+  font-weight: bold;
+}
