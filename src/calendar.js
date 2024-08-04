@@ -140,12 +140,19 @@ const CalendarComponent = () => {
           "date": keys[1],
           "events": "false",
           "people": firstDate
+        },
+        {
+          "date1": keys[0],
+          "date2": keys[1],
+          "people1": firstDate,
+          "people2": secondDate
         }
       ]
       try {
         const response1 = await axios.put('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items', myInit[0]);
         const response2 = await axios.put('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items', myInit[1]);
-        console.log('Success:', response1, response2);
+        const response3 = await axios.post('https://9uhunbcmd3.execute-api.ap-northeast-1.amazonaws.com/items', myInit[2]);
+        console.log('Success:', response1, response2, response3);
         // 成功後にページをリロード
         window.location.reload();
       } catch (error) {
