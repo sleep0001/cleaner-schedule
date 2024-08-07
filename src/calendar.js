@@ -128,31 +128,31 @@ const CalendarComponent = () => {
     // 選択日が2つあるなら交換、そうでないならフラッシュメッセージを残す。（一旦何も起きずにスキップで）
     if (Object.keys(newSelected).length === 2) {
       const keys = Object.keys(selectedDate);
-      const firstDate = keys.length > 0 ? selectedDate[keys[0]] : null;
-      const secondDate = keys.length > 1 ? selectedDate[keys[1]] : null;
-      const myInit = [
-        {
-          "date": keys[0],
-          "events": "false",
-          "people": secondDate
-        },
-        {
-          "date": keys[1],
-          "events": "false",
-          "people": firstDate
-        }
-      ]
-      const logRecord = {
+      const firstDateGroup = keys.length > 0 ? selectedDate[keys[0]] : null;
+      const secondDateGroup = keys.length > 1 ? selectedDate[keys[1]] : null;
+      const requestItems = {
+        "changeRecords":[
+          {
+            "date": keys[0],
+            "events": "false",
+            "people": secondDateGroup
+          },
+          {
+            "date": keys[1],
+            "events": "false",
+            "people": firstDateGroup
+          }
+        ],
+        "logRecord": {
           "date1": keys[0],
           "date2": keys[1],
-          "people1": firstDate,
-          "people2": secondDate
+          "people1": firstDateGroup,
+          "people2": secondDateGroup
+        }
       }
-      
       try {
-        const changeRecord = await axios.put('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items', myInit);
-        const createLog = await axios.post('https://9uhunbcmd3.execute-api.ap-northeast-1.amazonaws.com/items', logRecord);
-        console.log('Success:', changeRecord, createLog);
+        const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
+        console.log('Success:', requestRecord);
         // 成功後にページをリロード
         window.location.reload();
       } catch (error) {
