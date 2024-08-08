@@ -154,7 +154,7 @@ const CalendarComponent = () => {
         const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
         console.log('Success:', requestRecord);
         // 成功後にページをリロード
-        window.location.reload();
+        window.location.reload(true);
       } catch (error) {
         console.log('Error:', error);
       };
