@@ -8,35 +8,36 @@
 }
 
 .ant-picker-calendar-date-content.team1 {
-  background-color: #8BA083;
+  background-color: #FDEDEB  ;
 }
 
 .ant-picker-calendar-date-content.team2 {
-  background-color: #C0602D;
+  background-color: #DDE7F2  ;
 }
 
 .ant-picker-calendar-date-content.team3 {
-  background-color: #CDB5AF;
+  background-color: #FAF1E9     ;
 }
 
 .ant-picker-calendar-date-content.team4 {
-  background-color: #D2B48C;
+  background-color: #EED5D2    ;
+  
 }
 
 .ant-picker-calendar-date-content.team5 {
-  background-color: #EEB887;
+  background-color: #CDE7E5   ;
 }
 
 .ant-picker-calendar-date-content.team6 {
-  background-color: #D5CEA3;
+  background-color: #EAD7E6     ;
 }
 
 .ant-picker-calendar-date-content.holiday {
-  background-color: #E090AB;
+  background-color: #CDE7E5   ;
 }
 
 .ant-picker-calendar-date-content.newyear {
-  background-color: #FFEECC;
+  background-color: #CDE7E5 ;
 }
 
 .ant-picker-calendar-date-content.select-date {

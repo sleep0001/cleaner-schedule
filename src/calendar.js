@@ -163,7 +163,6 @@ const CalendarComponent = () => {
 
   return (
     <>
-      <a>交換モード</a>
       <Switch
         onClick={toggleSwitch}
         style={{
