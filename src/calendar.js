@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Switch, Button } from 'antd';
+import { Calendar, Switch, Button, message , Modal} from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
 
@@ -7,6 +7,8 @@ const CalendarComponent = () => {
   const [isChangeMode, setIsChangeMode] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
   const [currentMonth, setCurrentMonth] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの表示状態を管理
+
 
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
@@ -113,20 +115,27 @@ const CalendarComponent = () => {
     setCurrentMonth(value);
   };
 
-  const toggleSwitch = () => {
-    if (isChangeMode) {
-      console.log('トグルがオフにされた');
-      setSelectedDate({});
-    } else {
-      console.log('トグルがオンにされた');
+  const toggleSwitch = (checked) => {
+    setIsChangeMode(checked); // トグルボタンの状態を更新
+    if (!checked) {
+      setSelectedDate({}); // トグルオフ時に選択した日付をリセット
     }
-    setIsChangeMode(!isChangeMode);
   }
 
   const handleClick = async () => {
     const newSelected = { ...selectedDate };
     // 選択日が2つあるなら交換、そうでないならフラッシュメッセージを残す。（一旦何も起きずにスキップで）
     if (Object.keys(newSelected).length === 2) {
+      setIsModalOpen(true); // モーダルを表示
+    } else {
+      message.warning('2つの日付を選択してください。');
+    }
+  };
+
+  const handleOk = async () => {
+    
+
+  
       const keys = Object.keys(selectedDate);
       const firstDateGroup = keys.length > 0 ? selectedDate[keys[0]] : null;
       const secondDateGroup = keys.length > 1 ? selectedDate[keys[1]] : null;
@@ -153,24 +162,53 @@ const CalendarComponent = () => {
       try {
         const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
         console.log('Success:', requestRecord);
+        setIsChangeMode(false);
+        setIsModalOpen(false); // モーダルを閉じる
         // 成功後にページをリロード
-        window.location.reload(true);
+        message.success('SUCCESS!!', 3);
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 3000); // 3秒後にリロードを実行
       } catch (error) {
         console.log('Error:', error);
+        setIsChangeMode(false);
+        setIsModalOpen(false); // モーダルを閉じる
+        message.error('エラー！交換できませんでした。', 3);
       };
     };
-  };
+    
+    const handleCancel = () => {
+      setIsChangeMode(false);
+      setSelectedDate({}); // トグルオフ時に選択した日付をリセット
+      setIsModalOpen(false); // モーダルを閉じる
+    };
 
   return (
     <>
       <Switch
-        onClick={toggleSwitch}
+        checked={isChangeMode}
+        onChange={toggleSwitch}
         style={{
           margin: 16,
         }}
       />
       <Button type="primary" onClick={handleClick} href="#">CHANGE</Button>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
+      <Modal
+        title="Proceed with Swap?"
+        open={isModalOpen} // `visible`を`open`に変更
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="OK"
+        cancelText="キャンセル"
+      >
+        <p>選択した日付を入れ替えますか？</p>
+        {Object.keys(selectedDate).map((date, index) => (
+          <div key={index}>
+            <strong>{date}:</strong>{selectedDate[date].join(', ')}
+          </div>
+        ))}
+      </Modal>
     </>
   );
 };
