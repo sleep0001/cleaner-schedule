@@ -6,16 +6,25 @@ import { Link } from 'react-router-dom';
 const { Footer } = Layout;
 
 const AppFooter = () => {
+  const menuItems = [
+    {
+      key: '1',
+      label: <Link to="/">Home</Link>,
+    },
+    {
+      key: '2',
+      label: <Link to="/releasenotes">Release Notes</Link>,
+    },
+  ];
+
   return (
     <Footer style={{ textAlign: 'center', backgroundColor: '#001529', color: 'white' }}>
-      <Menu theme="dark" mode="horizontal" style={{ justifyContent: 'center', border: 'none', margin: '0' }}>
-        <Menu.Item key="1">
-          <Link to="/">Home</Link>
-        </Menu.Item>
-        <Menu.Item key="2">
-          <Link to="/releasenotes">Release Notes</Link>
-        </Menu.Item>
-      </Menu>
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        style={{ justifyContent: 'center', border: 'none', margin: '0' }}
+        items={menuItems}
+      />
       <div style={{ marginTop: '10px' }}>
         <p>© 2024 narikiri engineer alliance.</p>
       </div>
