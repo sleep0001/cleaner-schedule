@@ -170,14 +170,16 @@ const onSelect = (value) => {
           }
           return event;
           });
+          message.success('SUCCESS', 3);
           setData(updatedData);
       } catch (error) {
         console.log('Error:', error);
         setIsChangeMode(false);
-        setIsModalOpen(false); // モーダルを閉じる
         message.error('エラー！交換できませんでした。', 3);
       };
+      setIsModalOpen(false); // モーダルを閉じる
       setIsChangeMode(false);
+      setSelectedDate({});
     };
     
     const handleCancel = () => {
