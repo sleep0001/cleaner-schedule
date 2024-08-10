@@ -133,9 +133,6 @@ const CalendarComponent = () => {
   };
 
   const handleOk = async () => {
-    
-
-  
       const keys = Object.keys(selectedDate);
       const firstDateGroup = keys.length > 0 ? selectedDate[keys[0]] : null;
       const secondDateGroup = keys.length > 1 ? selectedDate[keys[1]] : null;
@@ -178,8 +175,6 @@ const CalendarComponent = () => {
     };
     
     const handleCancel = () => {
-      setIsChangeMode(false);
-      setSelectedDate({}); // トグルオフ時に選択した日付をリセット
       setIsModalOpen(false); // モーダルを閉じる
     };
 
@@ -192,7 +187,7 @@ const CalendarComponent = () => {
           margin: 16,
         }}
       />
-      <Button type="primary" onClick={handleClick} href="#">CHANGE</Button>
+      <Button type="primary" onClick={handleClick} >CHANGE</Button>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
       <Modal
         title="Proceed with Swap?"
