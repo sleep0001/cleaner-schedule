@@ -13,8 +13,12 @@ const AppHeader = () => {
     },
     {
       key: '2',
-      label: <Link to="/releasenotes">Release Notes</Link>,
+      label: <Link to="/v1_1_0">v1_1_0</Link>,
     },
+    {
+      key: '3',
+      label: <Link to="/v1_0_0">v1_0_0</Link>,
+    }
   ];
 
   return (

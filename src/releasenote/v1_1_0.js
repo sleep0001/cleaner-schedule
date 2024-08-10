@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ReleaseNotes = () => {
+const V1_1_0 = () => {
   return (
     <div style={{ padding: '20px', maxWidth: '50%', margin: '0 auto' }}>
       <h1>v1.0.1 リリースノート</h1>
@@ -43,4 +43,4 @@ const ReleaseNotes = () => {
   );
 };
 
-export default ReleaseNotes;
+export default V1_1_0;
