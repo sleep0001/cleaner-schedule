@@ -7,6 +7,8 @@ const CalendarComponent = () => {
   const [isChangeMode, setIsChangeMode] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
   const [currentMonth, setCurrentMonth] = useState(null);
+  // FIXME: ほんとはボタンコンポーネントで判断するべき
+  const [disabled, setDisabled] = useState(true);
 
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
@@ -106,6 +108,7 @@ const CalendarComponent = () => {
       return;
     }
     setSelectedDate(newSelected);
+    setDisabled(Object.keys(newSelected).length !== 2);
     console.log(newSelected);
   };
 
@@ -163,14 +166,14 @@ const CalendarComponent = () => {
 
   return (
     <>
-      <a>交換モード</a>
+      <span>交換モード</span>
       <Switch
         onClick={toggleSwitch}
         style={{
           margin: 16,
         }}
       />
-      <Button type="primary" onClick={handleClick} href="#">CHANGE</Button>
+      <Button type="primary" disabled={disabled} onClick={handleClick}>CHANGE</Button>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
     </>
   );
