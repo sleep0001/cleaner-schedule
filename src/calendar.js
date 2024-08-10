@@ -7,6 +7,7 @@ const CalendarComponent = () => {
   const [isChangeMode, setIsChangeMode] = useState(false);
   const [selectedDate, setSelectedDate] = useState({});
   const [currentMonth, setCurrentMonth] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの表示状態を管理
   // FIXME: ほんとはボタンコンポーネントで判断するべき
   const [disabled, setDisabled] = useState(true);
   const [tooltipText, setTooltipText] = useState('交換するには左のボタンをオンにしてください');
