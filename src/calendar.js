@@ -155,11 +155,21 @@ const onSelect = (value) => {
       try {
         const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
         console.log('Success:', requestRecord);
-        // 成功後にページをリロード
-        window.location.reload(true);
+        // 新しいデータを反映する
+        const updatedData = data.map(event => {
+        if (event.date === keys[0]) {
+          return { ...event, people: secondDateGroup };
+        }
+        if (event.date === keys[1]) {
+          return { ...event, people: firstDateGroup };
+        }
+        return event;
+        });
+        setData(updatedData);
       } catch (error) {
         console.log('Error:', error);
       };
+      setIsChangeMode(false);
     };
   };
 
