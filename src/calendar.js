@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Switch, Button } from 'antd';
+import { Calendar, Switch, Button, Tooltip } from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
 
@@ -9,6 +9,7 @@ const CalendarComponent = () => {
   const [currentMonth, setCurrentMonth] = useState(null);
   // FIXME: ほんとはボタンコンポーネントで判断するべき
   const [disabled, setDisabled] = useState(true);
+  const [tooltipText, setTooltipText] = useState('交換するには左のボタンをオンにしてください');
 
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
@@ -109,6 +110,7 @@ const CalendarComponent = () => {
     }
     setSelectedDate(newSelected);
     setDisabled(Object.keys(newSelected).length !== 2);
+    setTooltipText(Object.keys(newSelected).length !== 2 ? '日付をふたつ選んでください' : '');
     console.log(newSelected);
   };
 
@@ -123,9 +125,11 @@ const CalendarComponent = () => {
     } else {
       console.log('トグルがオンにされた');
     }
+    setTooltipText(isChangeMode ? '交換するには左のボタンをオンにしてください' : '日付をふたつ選んでください');
     setIsChangeMode(!isChangeMode);
   }
 
+  // FIXME: ボタンコンポーネントに移動するべき
   const handleClick = async () => {
     const newSelected = { ...selectedDate };
     // 選択日が2つあるなら交換、そうでないならフラッシュメッセージを残す。（一旦何も起きずにスキップで）
@@ -173,7 +177,9 @@ const CalendarComponent = () => {
           margin: 16,
         }}
       />
-      <Button type="primary" disabled={disabled} onClick={handleClick}>CHANGE</Button>
+      <Tooltip placement='right' title={tooltipText}>
+        <Button type="primary" disabled={disabled} onClick={handleClick}>CHANGE</Button>
+      </Tooltip>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
     </>
   );
