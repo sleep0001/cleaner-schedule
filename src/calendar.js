@@ -72,42 +72,44 @@ const CalendarComponent = () => {
     return <div>Loading...</div>; // データ取得中はローディングメッセージを表示
   };
 
-  const onSelect = (value) => {
-    console.log('onselect');
+const onSelect = (value) => {
+  console.log('onSelect');
 
-    // 交換モードでないなら何もせずにreturn
-    if (!isChangeMode) {
-      console.log(selectedDate);
-      return;
-    }
+  // 交換モードでないなら何もせずにreturn
+  if (!isChangeMode) {
+    console.log(selectedDate);
+    return;
+  }
 
-    const date = value.format('YYYY-MM-DD');
-    const eventInfo = data.find(event => event.date === date);
+  const date = value.format('YYYY-MM-DD');
 
-    // 休日は選択できない
-    if (eventInfo.events === 'true') {
-      console.log(selectedDate);
-      return;
-    }
+  // 選択された日付が予定を持たない、または休日の場合はスキップ
+  const eventInfo = data.find(event => event.date === date);
+  if (!eventInfo || eventInfo.events === 'true') {
+    console.log(selectedDate);
+    return;
+  }
 
-    // 現在の月と選択された日付の月が一致しない場合は処理をスキップ
-    if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
-      return;
-    }
+  // 現在の月と選択された日付の月が一致しない場合は処理をスキップ
+  if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
+    return;
+  }
 
+  const newSelected = { ...selectedDate };
 
-    const newSelected = { ...selectedDate };
-    if (newSelected.hasOwnProperty(eventInfo.date)) {
-      delete newSelected[eventInfo.date];
-    } else if (Object.keys(newSelected).length < 2) {
-      newSelected[eventInfo.date] = eventInfo.people;
-    } else {
-      console.log(newSelected);
-      return;
-    }
-    setSelectedDate(newSelected);
+  // 選択された日付がすでに選択されていれば削除、されていなければ追加
+  if (newSelected[date]) {
+    delete newSelected[date];
+  } else if (Object.keys(newSelected).length < 2) {
+    newSelected[date] = eventInfo.people;
+  } else {
     console.log(newSelected);
-  };
+    return;
+  }
+
+  setSelectedDate(newSelected);
+  console.log(newSelected);
+};
 
   const onPanelChange = (value) => {
     setCurrentMonth(value);
@@ -153,17 +155,26 @@ const CalendarComponent = () => {
       try {
         const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
         console.log('Success:', requestRecord);
-        // 成功後にページをリロード
-        window.location.reload(true);
+        // 新しいデータを反映する
+        const updatedData = data.map(event => {
+        if (event.date === keys[0]) {
+          return { ...event, people: secondDateGroup };
+        }
+        if (event.date === keys[1]) {
+          return { ...event, people: firstDateGroup };
+        }
+        return event;
+        });
+        setData(updatedData);
       } catch (error) {
         console.log('Error:', error);
       };
+      setIsChangeMode(false);
     };
   };
 
   return (
     <>
-      <a>交換モード</a>
       <Switch
         onClick={toggleSwitch}
         style={{
