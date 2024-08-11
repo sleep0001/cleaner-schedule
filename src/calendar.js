@@ -188,7 +188,9 @@ const CalendarComponent = () => {
         }}
       />
       <Button type="primary" onClick={handleClick} >CHANGE</Button>
-      <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
+      <div className="custom-calender">
+        <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
+      </div>
       <Modal
         title="Proceed with Swap?"
         open={isModalOpen} // `visible`を`open`に変更

@@ -1,8 +1,9 @@
 import React from 'react';
+import './releasenote.css';
 
 const V1_1_0 = () => {
   return (
-    <div style={{ padding: '20px', maxWidth: '50%', margin: '0 auto' }}>
+    <div className='releasenote'>
       <h1>v1.0.1 リリースノート</h1>
       <hr></hr>
       <ul>

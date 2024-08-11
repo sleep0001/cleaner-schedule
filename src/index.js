@@ -16,7 +16,7 @@ root.render(
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
         <AppHeader />
-        <Layout.Content style={{ padding: '60px', flex: 1 }}>
+        <Layout.Content style={{ padding: '5px', flex: 1 }}>
           <Routes>
             <Route path="/" element={<CalendarComponent />} />
             <Route path="/v1_0_0" element={<V1_0_0 />} />

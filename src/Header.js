@@ -1,7 +1,7 @@
-// src/Header.js
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
+import './Header.css';
 
 const { Header } = Layout;
 
@@ -23,9 +23,9 @@ const AppHeader = () => {
 
   return (
     <Layout>
-      <Header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div className="logo" style={{ color: 'white', fontSize: '20px' }}>
-          CleanTable2024
+      <Header className='header_class'>
+        <div className="logo">
+          <Link to="/" className='logo_text'>CleanTable2024</Link>
         </div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={menuItems} />
       </Header>
