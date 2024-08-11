@@ -35,10 +35,6 @@
   background-color: #d1e7cd;
 }
 
-.ant-picker-calendar-date-content.newyear {
-  background-color: #d1e7cd;
-}
-
 .ant-picker-calendar-date-content.select-date {
   background-color: red !important;
   color: #ffffFF !important;
