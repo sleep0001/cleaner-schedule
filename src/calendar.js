@@ -41,7 +41,6 @@ const CalendarComponent = () => {
       '佐藤': 'team4',
       '市橋': 'team5',
       '冨木田': 'team6',
-      '年末年始': 'newyear'
     };
 
     // 交換モードがオンで選択中の日付なら、背景色真っ赤を適用

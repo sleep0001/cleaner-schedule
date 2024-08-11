@@ -1,8 +1,9 @@
 import React from 'react';
+import './releasenote.css';
 
 const V1_0_0 = () => {
   return (
-    <div style={{ padding: '20px', maxWidth: '50%', margin: '0 auto' }}>
+    <div className='releasenote'>
       <h1>v1.0.0 リリースノート</h1>
       <hr></hr>
       <ul>
@@ -15,7 +16,7 @@ const V1_0_0 = () => {
       <hr></hr>
       <p>v1.0.0では以下の機能を追加しています。</p>
       <ul>
-        <li>当番表新規作成</li>
+        <li>当番表（閲覧のみ）</li>
       </ul>
     </div>
   );

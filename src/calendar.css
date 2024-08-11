@@ -29,6 +29,7 @@
     background-color: rgb(66, 58, 47);
 }
 
+
 /* 例: スマートフォン用のスタイル */
 @media (max-width: 768px) {
     .ant-picker-calendar-date-content {
