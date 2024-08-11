@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Switch, Button, message , Modal} from 'antd';
+import { Calendar, Switch, Button, Tooltip, message , Modal} from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
 
@@ -8,7 +8,9 @@ const CalendarComponent = () => {
   const [selectedDate, setSelectedDate] = useState({});
   const [currentMonth, setCurrentMonth] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの表示状態を管理
-
+  // FIXME: ほんとはボタンコンポーネントで判断するべき
+  const [disabled, setDisabled] = useState(true);
+  const [tooltipText, setTooltipText] = useState('交換するには左のボタンをオンにしてください');
 
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
@@ -73,42 +75,47 @@ const CalendarComponent = () => {
     return <div>Loading...</div>; // データ取得中はローディングメッセージを表示
   };
 
-  const onSelect = (value) => {
-    console.log('onselect');
+const onSelect = (value) => {
+  console.log('onSelect');
 
-    // 交換モードでないなら何もせずにreturn
-    if (!isChangeMode) {
-      console.log(selectedDate);
-      return;
-    }
+  // 交換モードでないなら何もせずにreturn
+  if (!isChangeMode) {
+    console.log(selectedDate);
+    return;
+  }
 
-    const date = value.format('YYYY-MM-DD');
-    const eventInfo = data.find(event => event.date === date);
+  const date = value.format('YYYY-MM-DD');
 
-    // 休日は選択できない
-    if (eventInfo.events === 'true') {
-      console.log(selectedDate);
-      return;
-    }
+  // 選択された日付が予定を持たない、または休日の場合はスキップ
+  const eventInfo = data.find(event => event.date === date);
+  if (!eventInfo || eventInfo.events === 'true') {
+    console.log(selectedDate);
+    return;
+  }
 
-    // 現在の月と選択された日付の月が一致しない場合は処理をスキップ
-    if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
-      return;
-    }
+  // 現在の月と選択された日付の月が一致しない場合は処理をスキップ
+  if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
+    return;
+  }
 
+  const newSelected = { ...selectedDate };
 
-    const newSelected = { ...selectedDate };
-    if (newSelected.hasOwnProperty(eventInfo.date)) {
-      delete newSelected[eventInfo.date];
-    } else if (Object.keys(newSelected).length < 2) {
-      newSelected[eventInfo.date] = eventInfo.people;
-    } else {
-      console.log(newSelected);
-      return;
-    }
-    setSelectedDate(newSelected);
+  // 選択された日付がすでに選択されていれば削除、されていなければ追加
+  if (newSelected[date]) {
+    delete newSelected[date];
+  } else if (Object.keys(newSelected).length < 2) {
+    newSelected[date] = eventInfo.people;
+  } else {
     console.log(newSelected);
-  };
+    return;
+  }
+
+  setSelectedDate(newSelected);
+  setDisabled(Object.keys(newSelected).length !== 2);
+  // TODO: 文言はラベルとして定数にしておくべき(忘れてた)
+  setTooltipText(Object.keys(newSelected).length !== 2 ? '日付をふたつ選んでください' : '');
+  console.log(newSelected);
+};
 
   const onPanelChange = (value) => {
     setCurrentMonth(value);
@@ -118,9 +125,14 @@ const CalendarComponent = () => {
     setIsChangeMode(checked); // トグルボタンの状態を更新
     if (!checked) {
       setSelectedDate({}); // トグルオフ時に選択した日付をリセット
+      setDisabled(true);
+      setTooltipText('交換するには左のボタンをオンにしてください');
+    } else {
+      setTooltipText('日付をふたつ選んでください');
     }
   }
 
+  // FIXME: ボタンコンポーネントに移動するべき
   const handleClick = async () => {
     const newSelected = { ...selectedDate };
     // 選択日が2つあるなら交換、そうでないならフラッシュメッセージを残す。（一旦何も起きずにスキップで）
@@ -158,19 +170,28 @@ const CalendarComponent = () => {
       try {
         const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
         console.log('Success:', requestRecord);
-        setIsChangeMode(false);
-        setIsModalOpen(false); // モーダルを閉じる
-        // 成功後にページをリロード
-        message.success('SUCCESS!!', 3);
-        setTimeout(() => {
-          window.location.reload(true);
-        }, 3000); // 3秒後にリロードを実行
+        // 新しいデータを反映する
+        const updatedData = data.map(event => {
+          if (event.date === keys[0]) {
+            return { ...event, people: secondDateGroup };
+          }
+          if (event.date === keys[1]) {
+            return { ...event, people: firstDateGroup };
+          }
+          return event;
+          });
+          message.success('SUCCESS', 3);
+          setData(updatedData);
       } catch (error) {
         console.log('Error:', error);
         setIsChangeMode(false);
-        setIsModalOpen(false); // モーダルを閉じる
         message.error('エラー！交換できませんでした。', 3);
       };
+      setIsModalOpen(false); // モーダルを閉じる
+      setIsChangeMode(false);
+      setDisabled(true);
+      setTooltipText('交換するには左のボタンをオンにしてください');
+      setSelectedDate({});
     };
     
     const handleCancel = () => {
@@ -186,10 +207,10 @@ const CalendarComponent = () => {
           margin: 16,
         }}
       />
-      <Button type="primary" onClick={handleClick} >CHANGE</Button>
-      <div className="custom-calender">
-        <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
-      </div>
+      <Tooltip placement='right' title={tooltipText}>
+        <Button type="primary" disabled={disabled} onClick={handleClick} >CHANGE</Button>
+      </Tooltip>
+      <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
       <Modal
         title="Proceed with Swap?"
         open={isModalOpen} // `visible`を`open`に変更
