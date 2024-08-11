@@ -125,10 +125,11 @@ const onSelect = (value) => {
     setIsChangeMode(checked); // トグルボタンの状態を更新
     if (!checked) {
       setSelectedDate({}); // トグルオフ時に選択した日付をリセット
+      setDisabled(true);
+      setTooltipText('交換するには左のボタンをオンにしてください');
+    } else {
+      setTooltipText('日付をふたつ選んでください');
     }
-    
-    setTooltipText(isChangeMode ? '交換するには左のボタンをオンにしてください' : '日付をふたつ選んでください');
-    setIsChangeMode(!isChangeMode);
   }
 
   // FIXME: ボタンコンポーネントに移動するべき
