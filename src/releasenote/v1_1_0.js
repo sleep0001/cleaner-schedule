@@ -4,7 +4,7 @@ import './releasenote.css';
 const V1_1_0 = () => {
   return (
     <div className='releasenote'>
-      <h1>v1.0.1 リリースノート</h1>
+      <h1>v1.1.0 リリースノート</h1>
       <hr></hr>
       <ul>
         <li><strong>リリース日：</strong>2024年8月11日</li>
