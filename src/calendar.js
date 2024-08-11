@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Switch, Button, message , Modal} from 'antd';
+import { Calendar, Switch, Button, Tooltip, message , Modal} from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
 
@@ -8,6 +8,9 @@ const CalendarComponent = () => {
   const [selectedDate, setSelectedDate] = useState({});
   const [currentMonth, setCurrentMonth] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの表示状態を管理
+  // FIXME: ほんとはボタンコンポーネントで判断するべき
+  const [disabled, setDisabled] = useState(true);
+  const [tooltipText, setTooltipText] = useState('交換するには左のボタンをオンにしてください');
 
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
@@ -109,6 +112,9 @@ const onSelect = (value) => {
   }
 
   setSelectedDate(newSelected);
+  setDisabled(Object.keys(newSelected).length !== 2);
+  // TODO: 文言はラベルとして定数にしておくべき(忘れてた)
+  setTooltipText(Object.keys(newSelected).length !== 2 ? '日付をふたつ選んでください' : '');
   console.log(newSelected);
 };
 
@@ -120,9 +126,14 @@ const onSelect = (value) => {
     setIsChangeMode(checked); // トグルボタンの状態を更新
     if (!checked) {
       setSelectedDate({}); // トグルオフ時に選択した日付をリセット
+      setDisabled(true);
+      setTooltipText('交換するには左のボタンをオンにしてください');
+    } else {
+      setTooltipText('日付をふたつ選んでください');
     }
   }
 
+  // FIXME: ボタンコンポーネントに移動するべき
   const handleClick = async () => {
     const newSelected = { ...selectedDate };
     // 選択日が2つあるなら交換、そうでないならフラッシュメッセージを残す。（一旦何も起きずにスキップで）
@@ -179,6 +190,8 @@ const onSelect = (value) => {
       };
       setIsModalOpen(false); // モーダルを閉じる
       setIsChangeMode(false);
+      setDisabled(true);
+      setTooltipText('交換するには左のボタンをオンにしてください');
       setSelectedDate({});
     };
     
@@ -195,7 +208,9 @@ const onSelect = (value) => {
           margin: 16,
         }}
       />
-      <Button type="primary" onClick={handleClick} >CHANGE</Button>
+      <Tooltip placement='right' title={tooltipText}>
+        <Button type="primary" disabled={disabled} onClick={handleClick} >CHANGE</Button>
+      </Tooltip>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
       <Modal
         title="Proceed with Swap?"
