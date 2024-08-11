@@ -8,6 +8,8 @@ const CalendarComponent = () => {
   const [selectedDate, setSelectedDate] = useState({});
   const [currentMonth, setCurrentMonth] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの表示状態を管理
+  // FIXME: ほんとはボタンコンポーネントで判断するべき
+  const [disabled, setDisabled] = useState(true);
 
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
@@ -109,6 +111,7 @@ const onSelect = (value) => {
   }
 
   setSelectedDate(newSelected);
+  setDisabled(Object.keys(newSelected).length !== 2);
   console.log(newSelected);
 };
 
@@ -120,9 +123,11 @@ const onSelect = (value) => {
     setIsChangeMode(checked); // トグルボタンの状態を更新
     if (!checked) {
       setSelectedDate({}); // トグルオフ時に選択した日付をリセット
+      setDisabled(true);
     }
   }
 
+  // FIXME: ボタンコンポーネントに移動するべき
   const handleClick = async () => {
     const newSelected = { ...selectedDate };
     // 選択日が2つあるなら交換、そうでないならフラッシュメッセージを残す。（一旦何も起きずにスキップで）
@@ -179,6 +184,7 @@ const onSelect = (value) => {
       };
       setIsModalOpen(false); // モーダルを閉じる
       setIsChangeMode(false);
+      setDisabled(true);
       setSelectedDate({});
     };
     
@@ -195,7 +201,7 @@ const onSelect = (value) => {
           margin: 16,
         }}
       />
-      <Button type="primary" onClick={handleClick} >CHANGE</Button>
+        <Button type="primary" disabled={disabled} onClick={handleClick} >CHANGE</Button>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
       <Modal
         title="Proceed with Swap?"
