@@ -8,3 +8,7 @@
     color: #ffffff;
     font-size: 22px;
 }
+
+.ant-layout-header {
+    padding:0px 20px;
+}
