@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 
 const { Header } = Layout;
+const { SubMenu } = Menu;
 
 const AppHeader = () => {
   const menuItems = [
@@ -12,12 +13,18 @@ const AppHeader = () => {
       label: <Link to="/">Home</Link>,
     },
     {
-      key: '2',
-      label: <Link to="/v1_1_0">v1_1_0</Link>,
-    },
-    {
-      key: '3',
-      label: <Link to="/v1_0_0">v1_0_0</Link>,
+      key: 'sub1',
+      label: 'More',
+      children: [
+        {
+          key: '2',
+          label: <Link to="/v1_1_0">v1_1_0</Link>,
+        },
+        {
+          key: '3',
+          label: <Link to="/v1_0_0">v1_0_0</Link>,
+        },
+      ],
     }
   ];
 
@@ -25,7 +32,7 @@ const AppHeader = () => {
     <Layout>
       <Header className='header_class'>
         <div className="logo">
-          <Link to="/" className='logo_text'>CleanTable2024</Link>
+          <Link to="/" className='logo_text'>OPRO2024</Link>
         </div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={menuItems} />
       </Header>
