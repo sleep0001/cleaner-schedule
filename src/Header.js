@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 
 const { Header } = Layout;
-const { SubMenu } = Menu;
 
 const AppHeader = () => {
   const menuItems = [
