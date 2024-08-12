@@ -35,7 +35,7 @@ const AppHeader = () => {
     <Layout>
       <Header className='header_class'>
         <div className="logo">
-          <Link to="/" className='logo_text'>CleanTable2024</Link>
+          <Link to="/" className='logo_text'>OPRO2024</Link>
         </div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={menuItems} />
       </Header>
