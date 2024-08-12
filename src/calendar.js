@@ -75,47 +75,47 @@ const CalendarComponent = () => {
     return <div>Loading...</div>; // データ取得中はローディングメッセージを表示
   };
 
-const onSelect = (value) => {
-  console.log('onSelect');
+  const onSelect = (value) => {
+    console.log('onSelect');
 
-  // 交換モードでないなら何もせずにreturn
-  if (!isChangeMode) {
-    console.log(selectedDate);
-    return;
-  }
+    // 交換モードでないなら何もせずにreturn
+    if (!isChangeMode) {
+      console.log(selectedDate);
+      return;
+    }
 
-  const date = value.format('YYYY-MM-DD');
+    const date = value.format('YYYY-MM-DD');
 
-  // 選択された日付が予定を持たない、または休日の場合はスキップ
-  const eventInfo = data.find(event => event.date === date);
-  if (!eventInfo || eventInfo.events === 'true') {
-    console.log(selectedDate);
-    return;
-  }
+    // 選択された日付が予定を持たない、または休日の場合はスキップ
+    const eventInfo = data.find(event => event.date === date);
+    if (!eventInfo || eventInfo.events === 'true') {
+      console.log(selectedDate);
+      return;
+    }
 
-  // 現在の月と選択された日付の月が一致しない場合は処理をスキップ
-  if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
-    return;
-  }
+    // 現在の月と選択された日付の月が一致しない場合は処理をスキップ
+    if (currentMonth && value.format('YYYY-MM') !== currentMonth.format('YYYY-MM')) {
+      return;
+    }
 
-  const newSelected = { ...selectedDate };
+    const newSelected = { ...selectedDate };
 
-  // 選択された日付がすでに選択されていれば削除、されていなければ追加
-  if (newSelected[date]) {
-    delete newSelected[date];
-  } else if (Object.keys(newSelected).length < 2) {
-    newSelected[date] = eventInfo.people;
-  } else {
+    // 選択された日付がすでに選択されていれば削除、されていなければ追加
+    if (newSelected[date]) {
+      delete newSelected[date];
+    } else if (Object.keys(newSelected).length < 2) {
+      newSelected[date] = eventInfo.people;
+    } else {
+      console.log(newSelected);
+      return;
+    }
+
+    setSelectedDate(newSelected);
+    setDisabled(Object.keys(newSelected).length !== 2);
+    // TODO: 文言はラベルとして定数にしておくべき(忘れてた)
+    setTooltipText(Object.keys(newSelected).length !== 2 ? '日付をふたつ選んでください' : '');
     console.log(newSelected);
-    return;
-  }
-
-  setSelectedDate(newSelected);
-  setDisabled(Object.keys(newSelected).length !== 2);
-  // TODO: 文言はラベルとして定数にしておくべき(忘れてた)
-  setTooltipText(Object.keys(newSelected).length !== 2 ? '日付をふたつ選んでください' : '');
-  console.log(newSelected);
-};
+  };
 
   const onPanelChange = (value) => {
     setCurrentMonth(value);
@@ -144,59 +144,68 @@ const onSelect = (value) => {
   };
 
   const handleOk = async () => {
-      const keys = Object.keys(selectedDate);
-      const firstDateGroup = keys.length > 0 ? selectedDate[keys[0]] : null;
-      const secondDateGroup = keys.length > 1 ? selectedDate[keys[1]] : null;
-      const requestItems = {
-        "changeRecords":[
-          {
-            "date": keys[0],
-            "events": "false",
-            "people": secondDateGroup
-          },
-          {
-            "date": keys[1],
-            "events": "false",
-            "people": firstDateGroup
-          }
-        ],
-        "logRecord": {
-          "date1": keys[0],
-          "date2": keys[1],
-          "people1": firstDateGroup,
-          "people2": secondDateGroup
+    const keys = Object.keys(selectedDate);
+    const firstDateGroup = keys.length > 0 ? selectedDate[keys[0]] : null;
+    const secondDateGroup = keys.length > 1 ? selectedDate[keys[1]] : null;
+    const requestItems = {
+      "changeRecords":[
+        {
+          "date": keys[0],
+          "events": "false",
+          "people": secondDateGroup
+        },
+        {
+          "date": keys[1],
+          "events": "false",
+          "people": firstDateGroup
         }
+      ],
+      "logRecord": {
+        "date1": keys[0],
+        "date2": keys[1],
+        "people1": firstDateGroup,
+        "people2": secondDateGroup
       }
-      try {
-        const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
-        console.log('Success:', requestRecord);
-        // 新しいデータを反映する
-        const updatedData = data.map(event => {
-          if (event.date === keys[0]) {
-            return { ...event, people: secondDateGroup };
-          }
-          if (event.date === keys[1]) {
-            return { ...event, people: firstDateGroup };
-          }
-          return event;
-          });
-          message.success('SUCCESS', 3);
-          setData(updatedData);
-      } catch (error) {
-        console.log('Error:', error);
-        setIsChangeMode(false);
-        message.error('エラー！交換できませんでした。', 3);
-      };
-      setIsModalOpen(false); // モーダルを閉じる
+    }
+    try {
+      const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
+      console.log('Success:', requestRecord);
+      // 新しいデータを反映する
+      const updatedData = data.map(event => {
+        if (event.date === keys[0]) {
+          return { ...event, people: secondDateGroup };
+        }
+        if (event.date === keys[1]) {
+          return { ...event, people: firstDateGroup };
+        }
+        return event;
+      });
+      message.success('SUCCESS', 3);
+      setData(updatedData);
+    } catch (error) {
+      console.log('Error:', error);
       setIsChangeMode(false);
-      setDisabled(true);
-      setTooltipText('交換するには左のボタンをオンにしてください');
-      setSelectedDate({});
+      message.error('エラー！交換できませんでした。', 3);
     };
+    setIsModalOpen(false); // モーダルを閉じる
+    setIsChangeMode(false);
+    setDisabled(true);
+    setTooltipText('交換するには左のボタンをオンにしてください');
+    setSelectedDate({});
+  };
     
-    const handleCancel = () => {
-      setIsModalOpen(false); // モーダルを閉じる
-    };
+  const handleCancel = () => {
+    setIsModalOpen(false); // モーダルを閉じる
+  };
+  
+  const detectSmartPhone = () => {
+    if (navigator.userAgent.match(/iPhone|Android.+Mobile/)) {
+      return true;
+    }
+    return false;
+  }
+
+  const isSmartPhone = detectSmartPhone();
 
   return (
     <>
@@ -207,7 +216,7 @@ const onSelect = (value) => {
           margin: 16,
         }}
       />
-      <Tooltip placement='right' title={tooltipText}>
+      <Tooltip placement='right' title={tooltipText} trigger={isSmartPhone ? 'click' : 'hover'}>
         <Button type="primary" disabled={disabled} onClick={handleClick} >CHANGE</Button>
       </Tooltip>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
