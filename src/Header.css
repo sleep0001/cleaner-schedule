@@ -1,0 +1,14 @@
+.header_class {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo_text {
+    color: #ffffff;
+    font-size: 22px;
+}
+
+.ant-layout-header {
+    padding: 0px 15px;
+}

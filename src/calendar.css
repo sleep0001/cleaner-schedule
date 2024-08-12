@@ -3,6 +3,7 @@
     padding: 5;
     list-style: none;
 }
+
 .events .ant-badge-status {
     width: 100%;
     overflow: hidden;
@@ -10,25 +11,30 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
 .notes-month {
     font-size: 28px;
     text-align: center;
 }
+
 .notes-month section {
     font-size: 28px;
 }
+
 .ant-picker-calendar {
     padding: 50px;
 }
+
 .ant-picker-calendar-header {
-    background-color: rgb(131, 80, 18);
+    background-color: rgb(66, 58, 47);
 }
+
 
 /* 例: スマートフォン用のスタイル */
 @media (max-width: 768px) {
     .ant-picker-calendar-date-content {
-      /* モバイル用のスタイルをここに追加 */
-      width: 55px;
+        /* モバイル用のスタイルをここに追加 */
+        width: 55px;
     }
 
     .ant-picker-cell ant-picker-cell-in-view {
@@ -37,5 +43,5 @@
         padding: 1px;
     }
 
-    
-  }
+
+}

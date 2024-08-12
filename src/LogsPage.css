@@ -1,0 +1,58 @@
+.logspage {
+    padding: 50px 10px 80px 50px;
+    min-height: 85vh;
+}
+
+.custom-timeline-item {
+    font-size: 25px;
+    /* サイズを調整 */
+}
+
+.custom-timeline .ant-timeline-item-head {
+    width: 20px; /* 点のサイズ */
+    height: 20px; /* 点のサイズ */
+    line-height: 20px; /* 点の高さを中央に合わせる */
+    font-size: 16px; /* 点のフォントサイズ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* 点を丸くする */
+    position: relative; /* 位置調整のための相対位置 */
+  }
+  
+  .custom-timeline .ant-timeline-item-content {
+    padding-left: 24px; /* 点のサイズに合わせてコンテンツの位置を調整 */
+  }
+  
+  .custom-timeline .ant-timeline-item-tail {
+    border-color: #1890ff; /* タイムラインの線の色 */
+    border-width: 13px;
+  }
+  
+  /* タイムラインのアイテムのコンテンツが点の横に適切に表示されるようにする */
+  .custom-timeline .ant-timeline-item {
+    position: relative;
+    margin-left: 24px; /* 点のサイズに合わせてアイテムの位置を調整 */
+  }
+
+  @media (max-width: 767px) {
+    .custom-timeline-item {
+        font-size: 20px;
+        /* サイズを調整 */
+    }
+    .custom-timeline .ant-timeline-item-head {
+      width: 20px; /* スマホ向けの点のサイズ */
+      height: 20px; /* スマホ向けの点のサイズ */
+      line-height: 12px; /* スマホ向けの点の高さを中央に合わせる */
+      font-size: 12px; /* スマホ向けの点のフォントサイズ */
+    }
+  
+    .custom-timeline .ant-timeline-item-content {
+      padding-left: 18px; /* スマホ向けのコンテンツの位置調整 */
+    }
+  
+    .custom-timeline .ant-timeline-item-tail {
+      border-color: #40a9ff; /* スマホ向けのタイムラインの線の色 */
+      border-width: 11px;
+    }
+  }
