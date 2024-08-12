@@ -20,30 +20,31 @@ const LogsPage = () => {
     fetchData();
   }, []);
 
+  // タイムラインのアイテムを事前に作成
+  const timelineItems = logsData.map((log, index) => {
+    const timestamp = new Date(log.Timestamp).toLocaleString();
+
+    return {
+      key: index,
+      color: index % 2 === 0 ? 'green' : 'blue',
+      children: (
+        <div className="custom-timeline-item">
+          <strong>{timestamp}</strong>
+          <div>
+            {log.date1}: <strong>{log.people2.join(', ')}</strong> to <strong>{log.people1.join(', ')}</strong>
+          </div>
+          <div>
+            {log.date2}: <strong>{log.people1.join(', ')}</strong> to <strong>{log.people2.join(', ')}</strong>
+          </div>
+        </div>
+      )
+    };
+  });
+
+  // タイムラインにアイテムを渡す
   return (
     <div className="logspage">
-      <Timeline
-        className="custom-timeline"
-        items={logsData.map((log, index) => {
-          const timestamp = new Date(log.Timestamp).toLocaleString();
-
-          return {
-            key: index, // keyはオブジェクト内のプロパティとしてではなく、Timelineのキーとして提供する
-            color: index % 2 === 0 ? 'green' : 'blue',
-            children: (
-              <div className="custom-timeline-item">
-                <strong>{timestamp}</strong>
-                <div>
-                  {log.date1}: <strong>{log.people2.join(', ')}</strong> to <strong>{log.people1.join(', ')}</strong>
-                </div>
-                <div>
-                  {log.date2}: <strong>{log.people1.join(', ')}</strong> to <strong>{log.people2.join(', ')}</strong>
-                </div>
-              </div>
-            )
-          };
-        })}
-      />
+      <Timeline className="custom-timeline" items={timelineItems} />
     </div>
   );
 }
