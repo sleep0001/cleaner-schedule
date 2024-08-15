@@ -31,10 +31,10 @@ const LogsPage = () => {
         <div className="custom-timeline-item">
           <strong>{timestamp}</strong>
           <div>
-            {log.date1}: <strong>{log.people2.join(', ')}</strong> to <strong>{log.people1.join(', ')}</strong>
+            {log.date1}: <strong>{log.people1.join(', ')}</strong> to <strong>{log.people2.join(', ')}</strong>
           </div>
           <div>
-            {log.date2}: <strong>{log.people1.join(', ')}</strong> to <strong>{log.people2.join(', ')}</strong>
+            {log.date2}: <strong>{log.people2.join(', ')}</strong> to <strong>{log.people1.join(', ')}</strong>
           </div>
         </div>
       )
