@@ -163,8 +163,8 @@ const CalendarComponent = () => {
       "logRecord": {
         "date1": keys[0],
         "date2": keys[1],
-        "people1": firstDateGroup,
-        "people2": secondDateGroup
+        "peopleAfter": secondDateGroup,
+        "peopleBefore": firstDateGroup
       }
     }
     try {
