@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Switch, Button, Tooltip, message , Modal} from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
+import Loader from './Loader';
 
 const CalendarComponent = () => {
   const [isChangeMode, setIsChangeMode] = useState(false);
@@ -14,7 +15,7 @@ const CalendarComponent = () => {
 
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); // データ取得中の状態を管理
+  const [isloading, setIsLoading] = useState(true); // データ取得中の状態を管理
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +26,7 @@ const CalendarComponent = () => {
       } catch (error) {
         console.error('Error fetching data', error);
       } finally {
-        setLoading(false); // データ取得完了後にローディング状態を解除
+        setIsLoading(false); // データ取得完了後にローディング状態を解除
       }
     };
     fetchData();
@@ -71,9 +72,9 @@ const CalendarComponent = () => {
     );
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // データ取得中はローディングメッセージを表示
-  };
+  // if (isloading) {
+  //   return <div>Loading...</div>; // データ取得中はローディングメッセージを表示
+  // };
 
   const onSelect = (value) => {
     console.log('onSelect');
@@ -144,6 +145,7 @@ const CalendarComponent = () => {
   };
 
   const handleOk = async () => {
+    setIsLoading(true);
     const keys = Object.keys(selectedDate);
     const firstDateGroup = keys.length > 0 ? selectedDate[keys[0]] : null;
     const secondDateGroup = keys.length > 1 ? selectedDate[keys[1]] : null;
@@ -180,12 +182,16 @@ const CalendarComponent = () => {
         }
         return event;
       });
+      setIsLoading(false);
       message.success('SUCCESS', 3);
       setData(updatedData);
     } catch (error) {
       console.log('Error:', error);
+      setIsLoading(false);
       setIsChangeMode(false);
       message.error('エラー！交換できませんでした。', 3);
+    } finally {
+      setIsLoading(false);
     };
     setIsModalOpen(false); // モーダルを閉じる
     setIsChangeMode(false);
@@ -209,6 +215,7 @@ const CalendarComponent = () => {
 
   return (
     <>
+      {isloading && <Loader />} {/* ローディング中はLoaderを表示 */}
       <Switch
         checked={isChangeMode}
         onChange={toggleSwitch}
@@ -217,7 +224,7 @@ const CalendarComponent = () => {
         }}
       />
       <Tooltip placement='right' title={tooltipText} trigger={isSmartPhone ? 'click' : 'hover'}>
-        <Button type="primary" disabled={disabled} onClick={handleClick} >CHANGE</Button>
+        <Button type="primary" disabled={disabled} onClick={handleClick}>CHANGE</Button>
       </Tooltip>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
       <Modal
@@ -231,7 +238,7 @@ const CalendarComponent = () => {
         <p>選択した日付を入れ替えますか？</p>
         {Object.keys(selectedDate).map((date, index) => (
           <div key={index}>
-            <strong>{date}:</strong>{selectedDate[date].join(', ')}
+            <strong>{date}:</strong> {selectedDate[date].join(', ')}
           </div>
         ))}
       </Modal>
