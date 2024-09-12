@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Switch, Button, Tooltip, message , Modal} from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
-import Loader from './Loader';
+import Loader_cat from './Loader_cat';
 
 const CalendarComponent = () => {
   const [isChangeMode, setIsChangeMode] = useState(false);
@@ -16,6 +16,9 @@ const CalendarComponent = () => {
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
   const [isloading, setIsLoading] = useState(true); // データ取得中の状態を管理
+
+  // 交換中のロードフラグ
+  const [isChangeLoading, setIsChangeLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,9 +75,9 @@ const CalendarComponent = () => {
     );
   };
 
-  // if (isloading) {
-  //   return <div>Loading...</div>; // データ取得中はローディングメッセージを表示
-  // };
+  if (isloading) {
+    return <div>Loading...</div>; // データ取得中はローディングメッセージを表示
+  };
 
   const onSelect = (value) => {
     console.log('onSelect');
@@ -145,7 +148,6 @@ const CalendarComponent = () => {
   };
 
   const handleOk = async () => {
-    setIsLoading(true);
     const keys = Object.keys(selectedDate);
     const firstDateGroup = keys.length > 0 ? selectedDate[keys[0]] : null;
     const secondDateGroup = keys.length > 1 ? selectedDate[keys[1]] : null;
@@ -169,7 +171,13 @@ const CalendarComponent = () => {
         "people2": secondDateGroup
       }
     }
+    let delay;
     try {
+      setIsChangeLoading(true);
+      // 3秒待機するためのPromise 非同期処理
+      delay = new Promise((resolve) => {
+        setTimeout(resolve, 3000); // 3秒待機
+      });
       const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
       console.log('Success:', requestRecord);
       // 新しいデータを反映する
@@ -182,16 +190,16 @@ const CalendarComponent = () => {
         }
         return event;
       });
-      setIsLoading(false);
+      // 3秒待機が終わるまで処理を待つ
+      await delay;
+      setIsChangeLoading(false);
       message.success('SUCCESS', 3);
       setData(updatedData);
     } catch (error) {
-      console.log('Error:', error);
-      setIsLoading(false);
-      setIsChangeMode(false);
+      // 3秒待機が終わるまで処理を待つ
+      await delay;
+      setIsChangeLoading(false);
       message.error('エラー！交換できませんでした。', 3);
-    } finally {
-      setIsLoading(false);
     };
     setIsModalOpen(false); // モーダルを閉じる
     setIsChangeMode(false);
@@ -215,7 +223,7 @@ const CalendarComponent = () => {
 
   return (
     <>
-      {isloading && <Loader />} {/* ローディング中はLoaderを表示 */}
+      {isChangeLoading && <Loader_cat/>}
       <Switch
         checked={isChangeMode}
         onChange={toggleSwitch}
@@ -224,7 +232,7 @@ const CalendarComponent = () => {
         }}
       />
       <Tooltip placement='right' title={tooltipText} trigger={isSmartPhone ? 'click' : 'hover'}>
-        <Button type="primary" disabled={disabled} onClick={handleClick}>CHANGE</Button>
+        <Button type="primary" disabled={disabled} onClick={handleClick} >CHANGE</Button>
       </Tooltip>
       <Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
       <Modal
@@ -234,11 +242,12 @@ const CalendarComponent = () => {
         onCancel={handleCancel}
         okText="OK"
         cancelText="キャンセル"
+        okButtonProps={{ disabled: isChangeLoading }}
       >
         <p>選択した日付を入れ替えますか？</p>
         {Object.keys(selectedDate).map((date, index) => (
           <div key={index}>
-            <strong>{date}:</strong> {selectedDate[date].join(', ')}
+            <strong>{date}:</strong>{selectedDate[date].join(', ')}
           </div>
         ))}
       </Modal>

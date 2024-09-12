@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './Loader.css';
+import './Loader_cat.css';
 
-const Loader = () => {
+const Loader_cat = () => {
   return (
     <div id="custom-page-loader">
       <img src={`${process.env.PUBLIC_URL}/images/loadingcat.gif`} alt="Loading" />
@@ -9,4 +9,4 @@ const Loader = () => {
   );
 };
 
-export default Loader;
+export default Loader_cat;
