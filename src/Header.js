@@ -21,10 +21,14 @@ const AppHeader = () => {
         },
         {
           key: '3',
-          label: <Link to="/v1_1_0">v1_1_0</Link>,
+          label: <Link to="/v1_2_0">v1_2_0</Link>,
         },
         {
           key: '4',
+          label: <Link to="/v1_1_0">v1_1_0</Link>,
+        },
+        {
+          key: '5',
           label: <Link to="/v1_0_0">v1_0_0</Link>,
         },
       ],
