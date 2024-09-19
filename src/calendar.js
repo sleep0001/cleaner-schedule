@@ -3,10 +3,8 @@ import { Calendar, Switch, Button, Tooltip, message , Modal} from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
 import Loader from './Loader';
+import { CAT, FIRST_LOAD } from './Constants';
 
-// loadTypeの変数をグローバルに宣言
-const cat = "cat";
-const firstLoad = "firstLoad";
 
 const CalendarComponent = () => {
   const [isChangeMode, setIsChangeMode] = useState(false);
@@ -20,12 +18,12 @@ const CalendarComponent = () => {
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
 
-  // ロード中の表示を管理　（"":null, "firstLoad":now Loading...の画像, "cat":動く猫)
+  // ロード中の表示を管理(変数はContants.jsで管理)
   const [loading, setLoading] = useState({isLoading: false, loadingType: null});
   
   useEffect(() => {
     const fetchData = async () => {
-      setLoading({isLoading: true, loadingType: firstLoad});
+      setLoading({isLoading: true, loadingType: FIRST_LOAD});
       try {
         const response = await axios.get('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items');
         setData(response.data);
@@ -173,7 +171,7 @@ const CalendarComponent = () => {
     }
     let delay;
     try {
-      setLoading({isLoading: true, loadingType: cat});
+      setLoading({isLoading: true, loadingType: CAT});
       // 3秒待機するためのPromise 非同期処理
       delay = new Promise((resolve) => {
         setTimeout(resolve, 3000); // 3秒待機
