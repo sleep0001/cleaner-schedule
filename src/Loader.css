@@ -7,11 +7,12 @@
   z-index: 6;
   background-color: rgba(255, 255, 255, 0.8);
   /* background-size: cover; */
+  z-index: 9998;
 }
 
 #custom-page-loader img {
-  z-index: 4;
-  width: 50vw;
+  z-index: 9999;
+  width: 75vw;
   position: fixed;
   /* 画面中央に配置 */
   top: 50%;
