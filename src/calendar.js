@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Switch, Button, Tooltip, message , Modal} from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
+import Loader from './Loader';
+import { NULL_IMAGE, CAT, FIRST_LOAD } from './Constants';
+
 
 const CalendarComponent = () => {
   const [isChangeMode, setIsChangeMode] = useState(false);
@@ -14,10 +17,13 @@ const CalendarComponent = () => {
 
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); // データ取得中の状態を管理
 
+  // ロード中の表示を管理(定数はContants.jsで管理)
+  const [loading, setLoading] = useState({isLoading: false, imageFile: NULL_IMAGE});
+  
   useEffect(() => {
     const fetchData = async () => {
+      setLoading({isLoading: true, imageFile: FIRST_LOAD});
       try {
         const response = await axios.get('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items');
         setData(response.data);
@@ -25,7 +31,7 @@ const CalendarComponent = () => {
       } catch (error) {
         console.error('Error fetching data', error);
       } finally {
-        setLoading(false); // データ取得完了後にローディング状態を解除
+        setLoading({isLoading: false, imageFile: NULL_IMAGE})
       }
     };
     fetchData();
@@ -69,10 +75,6 @@ const CalendarComponent = () => {
         ))}
       </div>
     );
-  };
-
-  if (loading) {
-    return <div>Loading...</div>; // データ取得中はローディングメッセージを表示
   };
 
   const onSelect = (value) => {
@@ -167,7 +169,13 @@ const CalendarComponent = () => {
         "people2": secondDateGroup
       }
     }
+    let delay;
     try {
+      setLoading({isLoading: true, imageFile: CAT});
+      // 3秒待機するためのPromise 非同期処理
+      delay = new Promise((resolve) => {
+        setTimeout(resolve, 3000); // 3秒待機
+      });
       const requestRecord = await axios.put('https://c8u7xj98yh.execute-api.ap-northeast-1.amazonaws.com/items', requestItems);
       console.log('Success:', requestRecord);
       // 新しいデータを反映する
@@ -180,11 +188,15 @@ const CalendarComponent = () => {
         }
         return event;
       });
+      // 3秒待機が終わるまで処理を待つ
+      await delay;
+      setLoading({isLoading: false, imageFile: NULL_IMAGE});
       message.success('SUCCESS', 3);
       setData(updatedData);
     } catch (error) {
-      console.log('Error:', error);
-      setIsChangeMode(false);
+      // 3秒待機が終わるまで処理を待つ
+      await delay;
+      setLoading({isLoading: false, imageFile: NULL_IMAGE});
       message.error('エラー！交換できませんでした。', 3);
     };
     setIsModalOpen(false); // モーダルを閉じる
@@ -209,6 +221,7 @@ const CalendarComponent = () => {
 
   return (
     <>
+      {loading.isLoading && <Loader imageFile={loading.imageFile} />}
       <Switch
         checked={isChangeMode}
         onChange={toggleSwitch}
@@ -227,6 +240,8 @@ const CalendarComponent = () => {
         onCancel={handleCancel}
         okText="OK"
         cancelText="キャンセル"
+        okButtonProps={{ disabled: loading.isLoading}}
+        zIndex={1000}
       >
         <p>選択した日付を入れ替えますか？</p>
         {Object.keys(selectedDate).map((date, index) => (
