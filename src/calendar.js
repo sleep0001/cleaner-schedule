@@ -19,11 +19,11 @@ const CalendarComponent = () => {
   const [data, setData] = useState([]);
 
   // ロード中の表示を管理(変数はContants.jsで管理)
-  const [loading, setLoading] = useState({isLoading: false, loadingType: null});
+  const [loading, setLoading] = useState({isLoading: false, loadType: null});
   
   useEffect(() => {
     const fetchData = async () => {
-      setLoading({isLoading: true, loadingType: FIRST_LOAD});
+      setLoading({isLoading: true, loadType: FIRST_LOAD});
       try {
         const response = await axios.get('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items');
         setData(response.data);
@@ -31,7 +31,7 @@ const CalendarComponent = () => {
       } catch (error) {
         console.error('Error fetching data', error);
       } finally {
-        setLoading({isLoading: false, loadingType: null})
+        setLoading({isLoading: false, loadType: null})
       }
     };
     fetchData();
@@ -171,7 +171,7 @@ const CalendarComponent = () => {
     }
     let delay;
     try {
-      setLoading({isLoading: true, loadingType: CAT});
+      setLoading({isLoading: true, loadType: CAT});
       // 3秒待機するためのPromise 非同期処理
       delay = new Promise((resolve) => {
         setTimeout(resolve, 3000); // 3秒待機
@@ -190,13 +190,13 @@ const CalendarComponent = () => {
       });
       // 3秒待機が終わるまで処理を待つ
       await delay;
-      setLoading({isLoading: false, loadingType: null});
+      setLoading({isLoading: false, loadType: null});
       message.success('SUCCESS', 3);
       setData(updatedData);
     } catch (error) {
       // 3秒待機が終わるまで処理を待つ
       await delay;
-      setLoading({isLoading: false, loadingType: null});
+      setLoading({isLoading: false, loadType: null});
       message.error('エラー！交換できませんでした。', 3);
     };
     setIsModalOpen(false); // モーダルを閉じる
@@ -221,7 +221,7 @@ const CalendarComponent = () => {
 
   return (
     <>
-      {loading.isLoading && <Loader loadType={loading.loadingType} />}
+      {loading.isLoading && <Loader loadType={loading.loadType} />}
       <Switch
         checked={isChangeMode}
         onChange={toggleSwitch}
