@@ -1,9 +1,12 @@
 .releasenote {
     padding: 10px 10px 80px 10px;
     min-height: 85vh;
-    margin: 0 auto; /* 水平方向に中央寄せ */
-    width: 80%; /* 幅を調整してバランスをとる */
-    max-width: 800px; /* 最大幅を設定 */
+    margin: 0 auto;
+    /* 水平方向に中央寄せ */
+    width: 80%;
+    /* 幅を調整してバランスをとる */
+    max-width: 800px;
+    /* 最大幅を設定 */
 }
 
 .releasenote ul {
@@ -27,7 +30,8 @@
     line-height: 1.6;
 }
 
-.releasenote h1, .releasenote h2 {
+.releasenote h1,
+.releasenote h2 {
     margin-bottom: 15px;
 }
 

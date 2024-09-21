@@ -1,61 +1,61 @@
 .event-container {
 
-  padding: 5px;
+	padding: 5px;
 }
 
 .event-item {
-  margin: 5px 0;
-  font-weight: bold;
+	margin: 5px 0;
+	font-weight: bold;
 }
 
 .ant-picker-calendar-date-content.team1 {
-  background-color: #CBE6E9;
+	background-color: #CBE6E9;
 }
 
 .ant-picker-calendar-date-content.team2 {
-  background-color: #D8D6D0;
+	background-color: #D8D6D0;
 }
 
 .ant-picker-calendar-date-content.team3 {
-  background-color: #EBEADB;
+	background-color: #EBEADB;
 }
 
 .ant-picker-calendar-date-content.team4 {
-  background-color: #C5C8DA;
+	background-color: #C5C8DA;
 }
 
 .ant-picker-calendar-date-content.team5 {
-  background-color: #EDD8DA;
+	background-color: #EDD8DA;
 }
 
 .ant-picker-calendar-date-content.team6 {
-  background-color: #F6E8C7;
+	background-color: #F6E8C7;
 }
 
 .ant-picker-calendar-date-content.team7 {
-  background-color: #cae099c9;
+	background-color: #cae099c9;
 }
 
 .ant-picker-calendar-date-content.holiday {
-  background-color: #d1e7cd7c;
+	background-color: #d1e7cd7c;
 }
 
 .ant-picker-calendar-date-content.select-date {
-  background-color: red !important;
-  color: #ffffFF !important;
+	background-color: red !important;
+	color: #ffffFF !important;
 }
 
 .event-item {
-  margin: 1px 0;
-  font-weight: bold;
+	margin: 1px 0;
+	font-weight: bold;
 }
 
 .ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-content {
-  /* 4行以上の時はここを変える */
-  height: 70px !important;
-  width: 100%;
+	/* 4行以上の時はここを変える */
+	height: 70px !important;
+	width: 100%;
 }
 
 .ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date {
-  padding: 0px;
+	padding: 0px;
 }
