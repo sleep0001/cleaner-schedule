@@ -36,11 +36,12 @@ const CalendarComponent = () => {
 
     const classNames = {
       '野際': 'team1',
-      '山崎': 'team2',
-      '岡野': 'team3',
-      '佐藤': 'team4',
-      '市橋': 'team5',
-      '冨木田': 'team6',
+      '内山': 'team2',
+      '山崎': 'team3',
+      '岡野': 'team4',
+      '佐藤': 'team5',
+      '市橋': 'team6',
+      '冨木田': 'team7',
     };
 
     // 交換モードがオンで選択中の日付なら、背景色真っ赤を適用
