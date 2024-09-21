@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Switch, Button, Tooltip, message, Modal } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
 import Loader from './Loader';
@@ -20,6 +22,9 @@ const CalendarComponent = () => {
 
 	// ロード中の表示を管理(定数はContants.jsで管理)
 	const [loading, setLoading] = useState({ isLoading: false, imageFile: NULL_IMAGE });
+
+	// 表示中の月を管理
+	const [currentDate, setCurrentDate] = useState(dayjs());
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -220,6 +225,14 @@ const CalendarComponent = () => {
 
 	const isSmartPhone = detectSmartPhone();
 
+	const handlePrevMonth = () => {
+		setCurrentDate(currentDate.subtract(1, 'month'));
+	};
+	
+	const handleNextMonth = () => {
+		setCurrentDate(currentDate.add(1, 'month'));
+	};
+
 	return (
 		<>
 			{loading.isLoading && <Loader imageFile={loading.imageFile} />}
@@ -233,7 +246,25 @@ const CalendarComponent = () => {
 			<Tooltip placement='right' title={tooltipText} trigger={isSmartPhone ? 'click' : 'hover'}>
 				<Button type="primary" disabled={disabled} onClick={handleClick} >CHANGE</Button>
 			</Tooltip>
-			<Calendar cellRender={cellRender} onSelect={onSelect} onPanelChange={onPanelChange} />
+			<Calendar
+				cellRender={cellRender}
+				onSelect={onSelect}
+				onPanelChange={onPanelChange}
+				value={currentDate}
+				headerRender={({ value, onChange }) => {
+					return (
+					  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+						<Button icon={<LeftOutlined />} onClick={handlePrevMonth}>
+						  Before
+						</Button>
+						<span>{value.format('MMMM YYYY')}</span>
+						<Button icon={<RightOutlined />} onClick={handleNextMonth}>
+						  After
+						</Button>
+					  </div>
+					);
+				  }}
+			/>
 			<Modal
 				title="Proceed with Swap?"
 				open={isModalOpen} // `visible`を`open`に変更
