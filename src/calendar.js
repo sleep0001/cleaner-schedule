@@ -251,7 +251,7 @@ const CalendarComponent = () => {
 				onSelect={onSelect}
 				onPanelChange={onPanelChange}
 				value={currentDate}
-				headerRender={({ value, onChange }) => {
+				headerRender={({ value }) => {
 					return (
 					  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 						<Button icon={<LeftOutlined />} onClick={handlePrevMonth}>
