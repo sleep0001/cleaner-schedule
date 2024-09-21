@@ -3,6 +3,7 @@ import './Loader.css';
 import { NULL_IMAGE } from './Constants';
 
 const Loader = ({ imageFile }) => {
+  console.log(`${process.env.PUBLIC_URL}/images/${imageFile}`);
   if (imageFile === NULL_IMAGE) {
     return null;
   }
