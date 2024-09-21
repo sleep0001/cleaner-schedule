@@ -3,7 +3,7 @@ import { Calendar, Switch, Button, Tooltip, message , Modal} from 'antd';
 import axios from 'axios';
 import './CalendarComponent.css'; // スタイルシートのインポート
 import Loader from './Loader';
-import { CAT, FIRST_LOAD } from './Constants';
+import { NULL_IMAGE, CAT, FIRST_LOAD } from './Constants';
 
 
 const CalendarComponent = () => {
@@ -18,12 +18,12 @@ const CalendarComponent = () => {
   // DynamoDBへのアクセス
   const [data, setData] = useState([]);
 
-  // ロード中の表示を管理(変数はContants.jsで管理)
-  const [loading, setLoading] = useState({isLoading: false, loadType: null});
+  // ロード中の表示を管理(定数はContants.jsで管理)
+  const [loading, setLoading] = useState({isLoading: false, imageFile: NULL_IMAGE});
   
   useEffect(() => {
     const fetchData = async () => {
-      setLoading({isLoading: true, loadType: FIRST_LOAD});
+      setLoading({isLoading: true, imageFile: FIRST_LOAD});
       try {
         const response = await axios.get('https://d0ns4u2oaj.execute-api.ap-northeast-1.amazonaws.com/items');
         setData(response.data);
@@ -31,7 +31,7 @@ const CalendarComponent = () => {
       } catch (error) {
         console.error('Error fetching data', error);
       } finally {
-        setLoading({isLoading: false, loadType: null})
+        setLoading({isLoading: false, imageFile: NULL_IMAGE})
       }
     };
     fetchData();
@@ -171,7 +171,7 @@ const CalendarComponent = () => {
     }
     let delay;
     try {
-      setLoading({isLoading: true, loadType: CAT});
+      setLoading({isLoading: true, imageFile: CAT});
       // 3秒待機するためのPromise 非同期処理
       delay = new Promise((resolve) => {
         setTimeout(resolve, 3000); // 3秒待機
@@ -190,13 +190,13 @@ const CalendarComponent = () => {
       });
       // 3秒待機が終わるまで処理を待つ
       await delay;
-      setLoading({isLoading: false, loadType: null});
+      setLoading({isLoading: false, imageFile: NULL_IMAGE});
       message.success('SUCCESS', 3);
       setData(updatedData);
     } catch (error) {
       // 3秒待機が終わるまで処理を待つ
       await delay;
-      setLoading({isLoading: false, loadType: null});
+      setLoading({isLoading: false, imageFile: NULL_IMAGE});
       message.error('エラー！交換できませんでした。', 3);
     };
     setIsModalOpen(false); // モーダルを閉じる
@@ -221,7 +221,7 @@ const CalendarComponent = () => {
 
   return (
     <>
-      {loading.isLoading && <Loader loadType={loading.loadType} />}
+      {loading.isLoading && <Loader imageFile={loading.imageFile} />}
       <Switch
         checked={isChangeMode}
         onChange={toggleSwitch}
