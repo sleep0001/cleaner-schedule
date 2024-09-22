@@ -7,7 +7,7 @@ const V1_2_0 = () => {
 			<h1>v1.2.0 リリースノート</h1>
 			<hr />
 			<ul>
-				<li><strong>リリース日：</strong>2024年9月22日</li>
+				<li><strong>リリース日：</strong>2024年9月23日</li>
 				<li><strong>リリースバージョン：</strong>v1.2.0</li>
 			</ul>
 			<h2>概要</h2>
