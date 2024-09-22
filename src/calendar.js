@@ -254,12 +254,12 @@ const CalendarComponent = () => {
 				headerRender={({ value }) => {
 					return (
 					  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<Button icon={<LeftOutlined />} onClick={handlePrevMonth}>
-						  Before
+						<Button onClick={handlePrevMonth}>
+						<LeftOutlined />{currentDate.subtract(1, 'month').format('MMM')}
 						</Button>
 						<span>{value.format('MMMM YYYY')}</span>
-						<Button icon={<RightOutlined />} onClick={handleNextMonth}>
-						  After
+						<Button onClick={handleNextMonth}>
+						{currentDate.add(1, 'month').format('MMM')}<RightOutlined />
 						</Button>
 					  </div>
 					);
