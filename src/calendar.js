@@ -225,13 +225,14 @@ const CalendarComponent = () => {
 
 	const isSmartPhone = detectSmartPhone();
 
-	const handlePrevMonth = () => {
-		setCurrentDate(currentDate.subtract(1, 'month'));
-	};
-	
-	const handleNextMonth = () => {
-		setCurrentDate(currentDate.add(1, 'month'));
-	};
+	const handleChangeMonth = (direction) => {
+		if (direction === 1) {
+			setCurrentDate(currentDate.add(1, 'month'));
+		} else {
+			setCurrentDate(currentDate.subtract(1, 'month'));
+		}
+
+	}
 
 	return (
 		<>
@@ -254,16 +255,16 @@ const CalendarComponent = () => {
 				headerRender={({ value }) => {
 					return (
 					  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<Button onClick={handlePrevMonth}>
+						<Button onClick={() => handleChangeMonth(-1)}>
 						<LeftOutlined />{currentDate.subtract(1, 'month').format('MMM')}
 						</Button>
 						<span>{value.format('MMMM YYYY')}</span>
-						<Button onClick={handleNextMonth}>
+						<Button onClick={() => handleChangeMonth(1) }>
 						{currentDate.add(1, 'month').format('MMM')}<RightOutlined />
 						</Button>
 					  </div>
 					);
-				  }}
+				}}
 			/>
 			<Modal
 				title="Proceed with Swap?"
