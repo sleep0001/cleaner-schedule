@@ -225,12 +225,8 @@ const CalendarComponent = () => {
 
 	const isSmartPhone = detectSmartPhone();
 
-	const handleChangeMonth = (direction) => {
-		if (direction === 1) {
-			setCurrentDate(currentDate.add(1, 'month'));
-		} else {
-			setCurrentDate(currentDate.subtract(1, 'month'));
-		}
+	const changeMonth = (direction) => {
+		setCurrentDate(currentDate.add(direction, 'month'));
 	}
 
 	return (
@@ -254,11 +250,11 @@ const CalendarComponent = () => {
 				headerRender={({ value }) => {
 					return (
 					  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<Button onClick={() => handleChangeMonth(-1)}>
+						<Button onClick={() => changeMonth(-1)}>
 						<LeftOutlined />{currentDate.subtract(1, 'month').format('MMM')}
 						</Button>
 						<span>{value.format('MMMM YYYY')}</span>
-						<Button onClick={() => handleChangeMonth(1) }>
+						<Button onClick={() => changeMonth(1) }>
 						{currentDate.add(1, 'month').format('MMM')}<RightOutlined />
 						</Button>
 					  </div>
