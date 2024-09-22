@@ -126,6 +126,7 @@ const CalendarComponent = () => {
 	};
 
 	const onPanelChange = (value) => {
+		setCurrentDate(value);
 		setCurrentMonth(value);
 	};
 
