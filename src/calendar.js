@@ -231,7 +231,6 @@ const CalendarComponent = () => {
 		} else {
 			setCurrentDate(currentDate.subtract(1, 'month'));
 		}
-
 	}
 
 	return (
