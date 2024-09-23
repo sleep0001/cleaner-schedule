@@ -6,13 +6,13 @@ import './Footer.css';
 const { Footer } = Layout;
 
 const AppFooter = () => {
-  return (
-    <Footer className='footer_class'>
-      <div className='footer_text'>
-        <p>© 2024 narikiri engineer alliance.</p>
-      </div>
-    </Footer>
-  );
+	return (
+		<Footer className='footer_class'>
+			<div className='footer_text'>
+				<p>© 2024 narikiri engineer alliance.</p>
+			</div>
+		</Footer>
+	);
 };
 
 export default AppFooter;

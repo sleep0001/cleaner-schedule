@@ -1,0 +1,22 @@
+#custom-page-loader {
+	position: fixed;
+	top: 64px;
+	left: 0;
+	width: 100vw;
+	height: 86vh;
+	z-index: 6;
+	background-color: rgba(255, 255, 255, 0.8);
+	/* background-size: cover; */
+	z-index: 9998;
+}
+
+#custom-page-loader img {
+	z-index: 9999;
+	width: 75vw;
+	position: fixed;
+	/* 画面中央に配置 */
+	top: 50%;
+	left: 50%;
+	/* 画像の基点を中央に指定 */
+	transform: translate(-50%, -50%);
+}
